@@ -1,0 +1,13 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: plain-data-sensor
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 3
+  replicas: 2
+  config:
+    retention.ms: 1000000
+    segment.bytes: 1073741824
+    cleanup.policy: delete

@@ -1,0 +1,490 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 9,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "ce5iqj8amqfpca"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "dBa"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 6,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.3.0",
+        "targets": [
+          {
+            "query": "from(bucket: \"Raw data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)  // Usa el rango de tiempo definido\n  |> filter(fn: (r) => r[\"_measurement\"] == \"noise_LA_max\")  // Filtrar la medición\n  |> filter(fn: (r) => r[\"_field\"] == \"noise_LA_max\")  // Filtrar el campo de temperatura\n  |> group(columns: [\"_measurement\", \"_field\", \"country\", \"location\"]) \n  |> aggregateWindow(every: 30d, fn: mean, createEmpty: false)  // Agrupar en ventanas de 10 minutos\n  |> group(columns: [\"_measurement\"]) // Elimina agrupaciones previas (para trabajar globalmente)\n  |> sort(columns: [\"_value\"], desc: false)  // Ordenar los datos por valor de temperatura en orden descendente\n  |> limit(n: 10)  // Tomar los 10 valores más altos globalmente\n  |> rename(columns: {_value: \"noise_LA_max\", location: \"Location\", country: \"Country\", _time: \"Time\"})  // Cambiar nombres de columnas\n  |> keep(columns: [\"noise_LA_max\", \"Country\", \"Location\"])  // Mantén solo las columnas relevantes\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Top 10 min noise LA max",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "noise_LA_max",
+              "renamePattern": "noise LA max"
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "ce5iqj8amqfpca"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "dBa"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 5,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.3.0",
+        "targets": [
+          {
+            "query": "from(bucket: \"Raw data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)  // Usa el rango de tiempo definido\n  |> filter(fn: (r) => r[\"_measurement\"] == \"noise_LA_max\")  // Filtrar la medición\n  |> filter(fn: (r) => r[\"_field\"] == \"noise_LA_max\")  // Filtrar el campo de temperatura\n  |> group(columns: [\"_measurement\", \"_field\", \"country\", \"location\"]) \n  |> aggregateWindow(every: 30d, fn: mean, createEmpty: false)  // Agrupar en ventanas de 10 minutos\n  |> group(columns: [\"_measurement\"]) // Elimina agrupaciones previas (para trabajar globalmente)\n  |> sort(columns: [\"_value\"], desc: true)  // Ordenar los datos por valor de temperatura en orden descendente\n  |> top(n: 10)  // Tomar los 10 valores más altos globalmente\n  |> rename(columns: {_value: \"noise_LA_max\", location: \"Location\", country: \"Country\", _time: \"Time\"})  // Cambiar nombres de columnas\n  |> keep(columns: [\"noise_LA_max\", \"Country\", \"Location\"])  // Mantén solo las columnas relevantes\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Top 10 max noise LA max",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "noise_LA_max",
+              "renamePattern": "noise LA max"
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "ce5iqj8amqfpca"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "dBa"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        },
+        "id": 7,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "11.3.0",
+        "targets": [
+          {
+            "query": "from(bucket: \"Raw data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"noise_LA_max\")\n  |> filter(fn: (r) => r._field == \"noise_LA_max\")\n  |> filter(fn: (r) => r[\"country\"] == \"${Country}\")\n  |> filter(fn: (r) => r[\"location\"] == \"${Location}\")\n  |> group(columns: [\"_measurement\", \"_field\", \"country\", \"location\"])\n  |> aggregateWindow(every: 10m, fn: mean, createEmpty: false)\n  |> rename(columns: {_value: \"Temperatura Promedio\"})\n  |> yield(name: \"mean\")\n",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "ce5iqj8amqfpca"
+            },
+            "hide": false,
+            "query": "from(bucket: \"predictions\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"noise_LA_max\")\n  |> filter(fn: (r) => r[\"_field\"] == \"noise_LA_max\")\n  |> filter(fn: (r) => r[\"country\"] == \"${Country}\")\n  |> filter(fn: (r) => r[\"location\"] == \"${Location}\")\n  |> group(columns: [\"_measurement\", \"_field\", \"country\", \"location\"])\n  |> aggregateWindow(every: 10m, fn: mean, createEmpty: false) \n  |> yield(name: \"mean\")",
+            "refId": "B"
+          }
+        ],
+        "title": "Real and predicted values",
+        "transformations": [
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "Temperatura Promedio.*",
+              "renamePattern": "Sensor noise LA max"
+            }
+          },
+          {
+            "id": "renameByRegex",
+            "options": {
+              "regex": "noise_LA_max.*",
+              "renamePattern": "noise LA max predicted"
+            }
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "ce5iqj8amqfpca"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "fieldMinMax": true,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": null
+                },
+                {
+                  "color": "light-green",
+                  "value": 70
+                },
+                {
+                  "color": "yellow",
+                  "value": 90
+                },
+                {
+                  "color": "semi-dark-orange",
+                  "value": 120
+                },
+                {
+                  "color": "dark-red",
+                  "value": 140
+                }
+              ]
+            },
+            "unit": "dBa"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 24,
+          "w": 24,
+          "x": 0,
+          "y": 16
+        },
+        "id": 4,
+        "options": {
+          "basemap": {
+            "config": {
+              "server": "streets",
+              "showLabels": true,
+              "theme": "auto"
+            },
+            "name": "Layer 0",
+            "type": "default"
+          },
+          "controls": {
+            "mouseWheelZoom": true,
+            "showAttribution": true,
+            "showDebug": false,
+            "showMeasure": false,
+            "showScale": false,
+            "showZoom": true
+          },
+          "layers": [
+            {
+              "config": {
+                "showLegend": true,
+                "style": {
+                  "color": {
+                    "field": "noise_LA_max",
+                    "fixed": "dark-green"
+                  },
+                  "opacity": 0.4,
+                  "rotation": {
+                    "fixed": 0,
+                    "max": 360,
+                    "min": -360,
+                    "mode": "mod"
+                  },
+                  "size": {
+                    "fixed": 5,
+                    "max": 15,
+                    "min": 2
+                  },
+                  "symbol": {
+                    "fixed": "img/icons/marker/cross.svg",
+                    "mode": "fixed"
+                  },
+                  "symbolAlign": {
+                    "horizontal": "center",
+                    "vertical": "center"
+                  },
+                  "textConfig": {
+                    "fontSize": 12,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "textAlign": "center",
+                    "textBaseline": "middle"
+                  }
+                }
+              },
+              "filterData": {
+                "id": "byRefId",
+                "options": "A"
+              },
+              "location": {
+                "mode": "auto"
+              },
+              "name": "Layer 4",
+              "opacity": 1,
+              "tooltip": false,
+              "type": "markers"
+            }
+          ],
+          "tooltip": {
+            "mode": "details"
+          },
+          "view": {
+            "allLayers": true,
+            "id": "zero",
+            "lat": 0,
+            "lon": 0,
+            "zoom": 1
+          }
+        },
+        "pluginVersion": "11.3.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "ce5iqj8amqfpca"
+            },
+            "hide": false,
+            "query": "import \"influxdata/influxdb/schema\"\n\nfrom(bucket: \"Raw data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"noise_LA_max\")\n  |> filter(fn: (r) => r._field == \"latitude\" or r._field == \"longitude\" or r._field == \"noise_LA_max\")\n  |> group(columns: [\"_measurement\", \"_field\", \"country\", \"location\"])\n  |> aggregateWindow(every: 30d, fn: mean, createEmpty: false) \n  |> schema.fieldsAsCols()\n  |> group()\n  |> sort(columns: [\"_time\"])",
+            "refId": "A"
+          }
+        ],
+        "title": "World map noise LA max",
+        "type": "geomap"
+      }
+    ],
+    "preload": false,
+    "schemaVersion": 40,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "Australia",
+            "value": "Australia"
+          },
+          "definition": "import \"influxdata/influxdb/schema\"\n\nschema.tagValues(\n  bucket: \"predictions\",\n  tag: \"country\",\n    predicate: (r) => r._measurement == \"noise_LA_max\"\n)\n",
+          "hide": 1,
+          "includeAll": false,
+          "label": "country",
+          "name": "Country",
+          "options": [],
+          "query": {
+            "query": "import \"influxdata/influxdb/schema\"\n\nschema.tagValues(\n  bucket: \"predictions\",\n  tag: \"country\",\n    predicate: (r) => r._measurement == \"noise_LA_max\"\n)\n"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "Sydney",
+            "value": "Sydney"
+          },
+          "definition": "import \"influxdata/influxdb/schema\"\n\nschema.tagValues(\n  bucket: \"predictions\",\n  tag: \"location\",\n  predicate: (r) => r._measurement == \"noise_LA_max\" and r[\"country\"] == \"${Country}\"\n)",
+          "includeAll": false,
+          "label": "Location",
+          "name": "Location",
+          "options": [],
+          "query": {
+            "query": "import \"influxdata/influxdb/schema\"\n\nschema.tagValues(\n  bucket: \"predictions\",\n  tag: \"location\",\n  predicate: (r) => r._measurement == \"noise_LA_max\" and r[\"country\"] == \"${Country}\"\n)"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "2024-12-14T23:00:00.000Z",
+      "to": "2024-12-15T22:59:59.000Z"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "noise LA max",
+    "uid": "de70ks37wxqf4c",
+    "version": 1,
+    "weekStart": ""
+  }

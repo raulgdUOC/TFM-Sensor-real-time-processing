@@ -1,0 +1,24 @@
+{{- range .Values.cronjobs }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .name }}
+  labels:
+{{ toYaml .labels | indent 4 }}
+spec:
+  schedule: "{{ .schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+{{ toYaml .labels | indent 12 }}
+        spec:
+          containers:
+            - name: {{ .name }}
+              image: {{ .image }}
+              env:
+{{ toYaml .env | indent 16 }}
+          restartPolicy: OnFailure
+---
+{{- end }}

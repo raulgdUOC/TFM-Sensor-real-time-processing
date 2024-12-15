@@ -1,0 +1,184 @@
+cronjobs:
+  - name: predict-temperature
+    image: app-predict:1.0
+    schedule: "5/10 * * * *"
+    labels:
+      predict: temperature
+    env:
+      - name: MEASUREMENT
+        value: "temperature"
+      - name: INFLUXDB_ORG
+        value: "influxdata"
+      - name: INFLUXDB_BUCKET
+        value: "Raw data"
+      - name: REDIS_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: my-redis
+            key: redis-password
+      - name: INFLUXDB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: my-influxdb-influxdb2-auth
+            key: admin-token
+
+
+  - name: predict-p1
+    image: app-predict:1.0
+    schedule: "5/10 * * * *"
+    labels:
+      predict: P1
+    env:
+      - name: MEASUREMENT
+        value: "P1"
+      - name: INFLUXDB_ORG
+        value: "influxdata"
+      - name: INFLUXDB_BUCKET
+        value: "Raw data"
+      - name: REDIS_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: my-redis
+            key: redis-password
+      - name: INFLUXDB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: my-influxdb-influxdb2-auth
+            key: admin-token
+
+  - name: predict-p2
+    image: app-predict:1.0
+    schedule: "5/10 * * * *"
+    labels:
+      predict: P2
+    env:
+      - name: MEASUREMENT
+        value: "P2"
+      - name: INFLUXDB_ORG
+        value: "influxdata"
+      - name: INFLUXDB_BUCKET
+        value: "Raw data"
+      - name: REDIS_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: my-redis
+            key: redis-password
+      - name: INFLUXDB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: my-influxdb-influxdb2-auth
+            key: admin-token
+
+  - name: predict-humidity
+    image: app-predict:1.0
+    schedule: "5/10 * * * *"
+    labels:
+      predict: humidity
+    env:
+      - name: MEASUREMENT
+        value: "humidity"
+      - name: INFLUXDB_ORG
+        value: "influxdata"
+      - name: INFLUXDB_BUCKET
+        value: "Raw data"
+      - name: REDIS_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: my-redis
+            key: redis-password
+      - name: INFLUXDB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: my-influxdb-influxdb2-auth
+            key: admin-token
+      
+  - name: predict-pressure-at-sealevel
+    image: app-predict:1.0
+    schedule: "5/10 * * * *"
+    labels:
+      predict: pressure-at-sealevel
+    env:
+      - name: MEASUREMENT
+        value: "pressure_at_sealevel"
+      - name: INFLUXDB_ORG
+        value: "influxdata"
+      - name: INFLUXDB_BUCKET
+        value: "Raw data"
+      - name: REDIS_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: my-redis
+            key: redis-password
+      - name: INFLUXDB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: my-influxdb-influxdb2-auth
+            key: admin-token
+
+  - name: predict-noise-laeq
+    image: app-predict:1.0
+    schedule: "5/10 * * * *"
+    labels:
+      predict: noise-LAeq
+    env:
+      - name: MEASUREMENT
+        value: "noise_LAeq"
+      - name: INFLUXDB_ORG
+        value: "influxdata"
+      - name: INFLUXDB_BUCKET
+        value: "Raw data"
+      - name: REDIS_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: my-redis
+            key: redis-password
+      - name: INFLUXDB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: my-influxdb-influxdb2-auth
+            key: admin-token
+    
+  - name: predict-noise-la-min
+    image: app-predict:1.0
+    schedule: "5/10 * * * *"
+    labels:
+      predict: noise-LA-min
+    env:
+      - name: MEASUREMENT
+        value: "noise_LA_min"
+      - name: INFLUXDB_ORG
+        value: "influxdata"
+      - name: INFLUXDB_BUCKET
+        value: "Raw data"
+      - name: REDIS_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: my-redis
+            key: redis-password
+      - name: INFLUXDB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: my-influxdb-influxdb2-auth
+            key: admin-token
+  - name: predict-noise-la-max
+    image: app-predict:1.0
+    schedule: "5/10 * * * *"
+    labels:
+      predict: noise-LA-max
+    env:
+      - name: MEASUREMENT
+        value: "noise_LA_max"
+      - name: INFLUXDB_ORG
+        value: "influxdata"
+      - name: INFLUXDB_BUCKET
+        value: "Raw data"
+      - name: REDIS_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: my-redis
+            key: redis-password
+      - name: INFLUXDB_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: my-influxdb-influxdb2-auth
+            key: admin-token

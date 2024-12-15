@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sensor-scapper
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: scapper
+            image: python-scrapper:1.0
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: REDIS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: my-redis
+          restartPolicy: OnFailure
+        

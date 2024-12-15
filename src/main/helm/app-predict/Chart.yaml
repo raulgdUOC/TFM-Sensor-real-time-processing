@@ -1,0 +1,6 @@
+apiVersion: v2
+name: multi-cronjob-chart
+description: A Helm chart for creating multiple cronjobs with customizable labels, images, and names
+version: 0.1.0
+
+dependencies: []

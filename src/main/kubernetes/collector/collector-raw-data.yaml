@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collector-raw-data
+  labels:
+    app: collector
+    type-data: raw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: collector
+      type-data: raw
+  template:
+    metadata:
+      labels:
+        app: collector
+        type-data: raw
+    spec:
+      containers:
+      - name: collector
+        image: python-kafka-to-influxdb-raw:1.0
+        env:
+        - name: INFLUXDB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: admin-token
+              name: my-influxdb-influxdb2-auth
