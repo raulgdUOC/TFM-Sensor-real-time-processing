@@ -1,0 +1,26 @@
+ apiVersion: monitoring.coreos.com/v1
+ kind: PodMonitor
+ metadata:
+   labels:
+     release: my-prmetheus
+     app.kubernetes.io/component: metrics
+     app.kubernetes.io/instance: my-prmetheus
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: kube-state-metrics
+     app.kubernetes.io/part-of: kube-state-metrics
+   name: flink-pod-monitor
+ spec:
+   namespaceSelector:
+     matchNames:
+       - default
+   podMetricsEndpoints:
+     - path: /metrics
+       relabelings:
+         - action: replace
+           replacement: '$1:9250'
+           sourceLabels:
+             - __meta_kubernetes_pod_ip
+           targetLabel: __address__
+   selector:
+     matchLabels:
+       type: flink-native-kubernetes
