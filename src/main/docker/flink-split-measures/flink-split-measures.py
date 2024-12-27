@@ -106,7 +106,7 @@ def main():
         properties={
             'bootstrap.servers': KAFKA_BROKER,
             'group.id': 'flink-append-by-country',
-            'auto.offset.reset': 'earliest',  # Solo para el consumidor
+            'auto.offset.reset': 'earliest',
         }
     )
     kafka_consumer.set_start_from_earliest()
@@ -140,7 +140,7 @@ def main():
         .map(lambda x: str(return_dict(x)), output_type=Types.STRING()) \
         .sink_to(producer).name(f"Kafka producer: {value_type}")
 
-    # Execture the job
+    # Execute the job
     env.execute(f"Split measures")
 
 if __name__ == "__main__":
