@@ -63,8 +63,6 @@ df["location_encoded"] = df["location"].map(dict_location_encoded).astype('float
 df = df.dropna(subset=["country_encoded", "location_encoded"])
 df = df.sort_values(['location_encoded', 'time'])
 
-df_transformed = df[["country_encoded", "location_encoded", "value"]]
-
 df_transformed = df
 
 def create_multivariate_rnn_data(data, window_size):
@@ -78,28 +76,28 @@ def create_multivariate_rnn_data(data, window_size):
     X = np.stack(X, axis=0)
     return X
 
+# Window_size of 1 hour
 window_size = 6
 
 X = create_multivariate_rnn_data(df_transformed, window_size=window_size)
 
 model = tf.keras.models.load_model(f"/app-predict/models/{measurement}_lstm.keras")
 
-X_test_sensors = X[:, :, 0].reshape(-1, window_size, 1).astype(float)  # Valores del sensor
-X_test_countries = X[:, 0, 4].astype(int)  # Países codificados
-X_test_locations = X[:, 0, 5].astype(int)  # Localizaciones codificadas
+X_test_sensors = X[:, :, 0].reshape(-1, window_size, 1).astype(float) 
+X_test_countries = X[:, 0, 4].astype(int) 
+X_test_locations = X[:, 0, 5].astype(int)
 
 predicciones = model.predict([X_test_sensors, X_test_countries, X_test_locations])
 
-#predicciones = model.predict(X[:,:,[0,4,5]].astype(float))
-
-
 timestamp = datetime.now() + timedelta(hours=1)
 
+# Create the dataframe with the predictions
 df_predicciones = pd.DataFrame({"country": X[:,0,2],
                              "location": X[:,0,3],
                              f"{measurement}": predicciones[:,0],
                              "timestamp": timestamp})
 
+# Prepare the data structure
 points = [
     Point(measurement)
     .tag("country", row['country'])
@@ -109,5 +107,5 @@ points = [
     for _, row in df_predicciones.iterrows()
 ]
 
-# Escritura batch
+# write to influxdb
 write_api.write(bucket="predictions", org=influxdb_org, record=points)
