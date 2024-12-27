@@ -8,8 +8,8 @@ import os
 # Kafka config
 kafka_config = {
     'bootstrap.servers': 'my-cluster-kafka-brokers:9092',  # Kafka server
-    'group.id': 'raw-data',                # Consummer group
-    'auto.offset.reset': 'earliest',       # From the beggining in case of no offset
+    'group.id': 'raw-data',                # Consumer group
+    'auto.offset.reset': 'earliest',       # From the beginning in case of no offset
 }
 
 kafka_topics = ['temperature-topic', 
@@ -40,7 +40,7 @@ def parse_and_write_to_influxdb(message):
         # Parse to JSON
         data = json.loads(message)
         
-        # Take the relevants fields
+        # Take the relevant fields
         sensor_type = data['sensor']['sensor_name']
         timestamp = data['timestamp']
         location = data['location']
@@ -67,7 +67,7 @@ try:
     print("Starting Kafka...")
     while True:
         # Read messages
-        msg = consumer.poll(1.0)  # Wait 1 seccond per message
+        msg = consumer.poll(1.0)  # Wait 1 second per message
 
         if msg is None:
             continue
@@ -86,7 +86,7 @@ try:
 except KeyboardInterrupt:
     print("Consumption interrupted by the user")
 finally:
-    # Cerrar conexiones
+    # Close connections
     print("Closing Kafka consumer and InfluxDB client...")
     consumer.close()
     influxdb_client.close()
