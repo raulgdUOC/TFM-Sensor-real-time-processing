@@ -3,6 +3,7 @@ kind: CronJob
 metadata:
   name: sensor-scapper
 spec:
+  suspend: true
   schedule: "*/10 * * * *"
   jobTemplate:
     spec:

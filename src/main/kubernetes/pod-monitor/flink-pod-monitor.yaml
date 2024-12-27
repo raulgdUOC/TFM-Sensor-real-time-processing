@@ -2,9 +2,9 @@
  kind: PodMonitor
  metadata:
    labels:
-     release: my-prmetheus
+     release: my-prometheus
      app.kubernetes.io/component: metrics
-     app.kubernetes.io/instance: my-prmetheus
+     app.kubernetes.io/instance: my-prometheus
      app.kubernetes.io/managed-by: Helm
      app.kubernetes.io/name: kube-state-metrics
      app.kubernetes.io/part-of: kube-state-metrics
