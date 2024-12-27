@@ -19,7 +19,7 @@ La solución presentada trata sobre un caso practico de procesamiento de datos a
 
 Por otro lado se han desarrollado aplicaciones para poder culminar con el proyecto:
 
-- Scrapper: Aplicación desarrollada en python para obtener la información y enviarla en crudo a kafka.
+- scraper: Aplicación desarrollada en python para obtener la información y enviarla en crudo a kafka.
 - Collector: Flink no tiene una integración nativa con influxDB (conocidos como sinks), por lo que tuve que desarrollar un collector encargado de enviar los datos desde la cola de kafka con los datos procesado a influxDB.
 - model-RNN: Código desarrollado en python para la creación de los modelos para la posterior predicción de los valores  de los sensores a futuro.
 - app-predict: Aplicación que se encarga de cargar el modelo correspondiente al tipo de valor que se vaya a predecir para asi poder realizar una predicción y guardar esa predicción en influxDB.
@@ -34,7 +34,7 @@ También he guardado aquí los diccionarios con los países y localizaciones que
 
 ### Apache Kafka
 
-Kafka es una plataforma distribuida para guardar eventos. Se ha escogido esta debido a su popularidad y su rendimiento. El caso de uso en este proyecto ha sido para guardar los datos obtenidos por el scrapper en un topic y también los datos procesados por flink; un topic por cada uno de los tipos de sensores.
+Kafka es una plataforma distribuida para guardar eventos. Se ha escogido esta debido a su popularidad y su rendimiento. El caso de uso en este proyecto ha sido para guardar los datos obtenidos por el scraper en un topic y también los datos procesados por flink; un topic por cada uno de los tipos de sensores.
 
 ### Apache Flink
 
@@ -58,7 +58,7 @@ Para los contenedores de las aplicaciones, se ha usado docker. Existen otras pla
 
 ## Aplicaciones desarrolladas
 
-### Scrapper
+### scraper
 
 Se trata de una aplicación desarrollada en python para obtener los datos de [sensor.community](https://sensor.community/), realizar una búsqueda inversa para asi obtener la ciudad, pueblo o estado (si lo hay), y posteriormente enviarlo a kafka.
 

@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: scapper
-            image: python-scrapper:1.0
+            image: python-scraper:1.0
             imagePullPolicy: IfNotPresent
             env:
             - name: REDIS_SECRET
