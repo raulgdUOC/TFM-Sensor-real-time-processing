@@ -88,7 +88,6 @@ def split_measures(data):
 
 
 def main():
-    # Crear el entorno de ejecución
     kafka_jar = "file:///opt/flink/usrlib/flink-sql-connector-kafka-3.0.2-1.18.jar"
     env = StreamExecutionEnvironment.get_execution_environment()
     env.set_parallelism(1)
