@@ -34,42 +34,18 @@ def edge_case(values):
 
             return False
 
-    def edge_case_temperature(value):
-        return ((value < 40 ) & ( value > -30))
-    
-    def edge_case_P1(value):
-        return ((value < 500) & ( value > 0))
-    
-    def edge_case_P2(value):
-        return ((value < 500 ) & ( value > 0))
-
-    def edge_case_humidity(value):
-        return ((value < 100 ) & ( value > 0))
-    
-    def edge_case_pressure_at_sealevel(value):
-        return ((value < 105000 ) & ( value > 85000))
-
-    def edge_case_noise_LAeq(value):
-        return ((value < 120 ) & ( value > 30))
-    
-    def edge_case_noise_LA_min(value):
-        return ((value < 30 ) & ( value > 0))
-
-    def edge_case_noise_LA_max(value):
-        return ((value < 140 ) & ( value > 50))
-    
-    funct_dict = {
-        "temperature": edge_case_temperature,
-        "P1": edge_case_P1,
-        "P2": edge_case_P2,
-        "humidity": edge_case_humidity,
-        "pressure_at_sealevel": edge_case_pressure_at_sealevel,
-        "noise_LAeq": edge_case_noise_LAeq,
-        "noise_LA_min": edge_case_noise_LA_min,
-        "noise_LA_max": edge_case_noise_LA_max,
+    EDGE_CASES = {
+        "temperature": lambda v: -30 < v < 40,
+        "P1": lambda v: 0 < v < 500,
+        "P2": lambda v: 0 < v < 500,
+        "humidity": lambda v: 0 < v < 100,
+        "pressure_at_sealevel": lambda v: 85000 < v < 105000,
+        "noise_LAeq": lambda v: 30 < v < 120,
+        "noise_LA_min": lambda v: 0 < v < 30,
+        "noise_LA_max": lambda v: 50 < v < 140,
     }
 
-    return funct_dict[value_type](value)
+    return EDGE_CASES[value_type](value)
 
 
 def parse_data(data, value):
