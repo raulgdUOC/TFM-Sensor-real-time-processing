@@ -6,6 +6,7 @@ import tensorflow as tf
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, LSTM, Input, Embedding, Flatten, Concatenate
+from tensorflow.keras.layers import RepeatVector
 from sklearn.preprocessing import LabelEncoder
 import redis
 from influxdb_client import InfluxDBClient
@@ -86,7 +87,7 @@ df = df.sort_values(['location_encoded', 'time'])
 
 df_transformed = df[["country_encoded", "location_encoded", "value"]]
 
-# Función para generar datos para la RNN
+# Parse data as a window size
 def create_multivariate_rnn_data(data, window_size):
     y = data['value'][window_size:]
     y_reset_index = y.reset_index()
@@ -141,12 +142,11 @@ location_embedding = Flatten()(location_embedding)
 
 categorical_features = Concatenate()([country_embedding, location_embedding])
 sensor_reshaped = Dense(embedding_dim_country + embedding_dim_location, activation='relu')(sensor_input)
-from tensorflow.keras.layers import RepeatVector
 
-# Expandir categorical_features para que coincida con la dimensión temporal de sensor_reshaped
+
 categorical_features_expanded = RepeatVector(window_size)(categorical_features)
 
-# Concatenar las características temporales y las categóricas
+# Concat categorical features with the temporal series
 merged_features = Concatenate(axis=-1)([sensor_reshaped, categorical_features_expanded])
 
 lstm_output = LSTM(units=lstm_units, dropout=0.1, recurrent_dropout=0.1)(merged_features)
@@ -156,7 +156,7 @@ output = Dense(output_size, activation='linear')(dense_output)
 lstm_model = Model(inputs=[sensor_input, country_input, location_input], outputs=output)
 lstm_model.compile(loss='mae', optimizer='RMSProp')
 
-# Entrenamiento
+# train
 lstm_path = (results_path / f'{measurement}_lstm.keras').as_posix()
 
 checkpointer = ModelCheckpoint(filepath=lstm_path, verbose=1, monitor='val_loss', mode='min', save_best_only=True)
@@ -173,7 +173,7 @@ result_lstm = lstm_model.fit(
     verbose=1
 )
 
-# Evaluación
+# predict
 y_pred = lstm_model.predict([X_test_sensors, X_test_countries, X_test_locations])
 mae = mean_absolute_error(y_test, y_pred)
 print(f'Mean Absolute Error: {mae}')
