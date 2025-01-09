@@ -1,6 +1,16 @@
+# Indice
+
+- [Sobre este repositorio](#sobre-este-repositorio)
+- [Introducción](#introducción)
+- [Despliegue](#despliegue)
+  - [Pre-requisitos](#pre-requisitos)
+  - [Pasos para desplegar el proyecto](#pasos-para-desplegar-el-proyecto)
+
+# Sobre este repositorio
+
 En este repositorio se encuentra el proyecto final de master realizado por Raúl García Díaz ([raulgd@uoc.edu](mailto:raulgd@uoc.edu)).
 
-## Introducción
+# Introducción
 
 La solución presentada trata sobre un caso practico de procesamiento de datos a tiempo real. Para ello se ha hecho uso de diferentes tecnologías:
 
@@ -91,7 +101,7 @@ $ minikube start --nodes 1 --memory 18432 --cpus 9
 - Mietras se obtienen las localizaciones, se puede continuar con el despliegue. Ahora es necesario crear los buckets, cuyos nombres son:
   - *Raw data*
   - *predictions*
-
+  ![alt text](images/creacion_buckets.png)
 - Con los bucket creados, se puede ya finalmente desplegar el *collector*, *app-predict* y *Grafana*
 
   ```bash
@@ -100,4 +110,5 @@ $ minikube start --nodes 1 --memory 18432 --cpus 9
   $ helm install my-grafana src/main/helm/grafana 
   ```
 
-- Finalmente se añade prometheus como data-source e InfluxDB y se importan los dashboards.
+- Finalmente se añade InfluxDB data-source y se importan los dashboards.
+  ![Configuracion del datasource de influxDB](images/influxDB-datasource.png)
